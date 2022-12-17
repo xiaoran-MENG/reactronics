@@ -1,25 +1,33 @@
 import './styles.css'
-import { useEffect, useState } from 'react';
-import { Product } from '../models/product';
+import { Container, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+import Catalog from '../../features/catalog/Catalog';
+import Nav from './Nav';
+import { useState } from 'react';
 
 const App = () => {
 
-  const [products, setProducts] = useState<Product[] | null>([]);
+  const [isDarkMode, setMode] = useState(false)
 
-  useEffect(() => {
-    fetch("http://localhost:5000/api/products")
-      .then(res => res.json())
-      .then(data => setProducts(data))
-  }, [])
+  const theme = createTheme({
+    palette: {
+      mode: isDarkMode ? 'dark' : 'light'
+    }
+  })
 
-  if (!products) return <>
-    <h1>Loading...</h1>
-  </>
+  const onModeChange = () => {
+    setMode(!isDarkMode)
+  }
 
-  return <>
-    <h1>App</h1>
-    <ul>{products.map((p, i) => <li key={i}>{p.name}</li>)}</ul>
-  </>
+  return <ThemeProvider theme={theme}>
+    <CssBaseline />
+    <Nav
+      isDarkMode={isDarkMode}
+      onModeChange={onModeChange} 
+    />
+    <Container>
+      <Catalog />
+    </Container>
+  </ThemeProvider>
 }
 
 export default App
