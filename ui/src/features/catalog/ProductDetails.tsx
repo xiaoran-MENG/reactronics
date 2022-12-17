@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom'
 import { Product } from './../../app/models/product';
 import { TableBody, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import Divider from '@mui/material/Divider';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableRow from '@mui/material/TableRow';
@@ -38,9 +37,12 @@ const ProductDetails = () => {
       />
     </Grid>
     <Grid item xs={6}>
-      <Typography variant='h3'>{product.name}</Typography>
-      <Divider sx={{ mb: 2 }} />
-      <Typography variant='h4'>${(product.price / 100).toFixed(2)}</Typography>
+      <Typography 
+        variant='h2' 
+        sx={{ mb: 2 }}
+      >
+        {product.name}
+      </Typography>
       <TableContainer>
         <Table>
           <TableBody>
@@ -55,6 +57,12 @@ const ProductDetails = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Typography 
+        variant='h3' 
+        sx={{ mt: 3 }}
+      >
+        ${(product.price / 100).toFixed(2)}
+      </Typography>
     </Grid>
   </Grid>
 }
