@@ -8,6 +8,7 @@ import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
+import api from './../../app/api/index';
 
 const ProductDetails = () => {
 
@@ -16,8 +17,8 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/products/${id}`)
-      .then(({ data }) => setProduct(data))
+    api.catalog.one(parseInt(id))
+      .then(x => setProduct(x))
       .catch(e => console.log(e))
       .finally(() => setLoading(false))
   }, [id])

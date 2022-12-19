@@ -25,7 +25,8 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> ById(int id)
         {
-            return await c.Products.FindAsync(id);
+            var x = await c.Products.FindAsync(id);
+            return x == null ? NotFound() : x;
         }
     }
 }
