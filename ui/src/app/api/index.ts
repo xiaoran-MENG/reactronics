@@ -3,7 +3,6 @@ import { toast } from "react-toastify"
 
 axios.defaults.baseURL = 'http://localhost:5000/api/'
 axios.interceptors.response.use(r => r, (e: AxiosError) => {
-
     const { status } = e.response!
 
     switch (status) {
