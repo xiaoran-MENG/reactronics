@@ -1,8 +1,28 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios"
+import { toast } from "react-toastify"
 
 axios.defaults.baseURL = 'http://localhost:5000/api/'
 axios.interceptors.response.use(r => r, (e: AxiosError) => {
-    console.log('Caught')
+
+    const { status } = e.response!
+
+    switch (status) {
+        case 400:
+            toast.error('400')
+            break
+        case 401:
+            toast.error('401')
+            break
+        case 404:
+            toast.error('404')
+            break
+        case 500:
+            toast.error('500')
+            break
+        default:
+            break
+    }
+
     return Promise.reject(e.response)
 })
 

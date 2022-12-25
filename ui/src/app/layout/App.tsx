@@ -8,6 +8,8 @@ import About from '../../features/about/About';
 import ProductDetails from '../../features/catalog/ProductDetails';
 import Contact from '../../features/contact/Contact';
 import Home from '../../features/home/Home';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 
 const App = () => {
 
@@ -24,6 +26,7 @@ const App = () => {
   }
 
   return <ThemeProvider theme={theme}>
+    <ToastContainer position='bottom-right' />
     <CssBaseline />
     <Nav
       isDarkMode={isDarkMode}
