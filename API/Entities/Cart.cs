@@ -6,14 +6,14 @@ namespace API.Entities
     public class Cart
     {
         public int Id { get; set; }
-        public string customerId { get; set; }
+        public string CustomerId { get; set; }
         public List<CartItem> Items { get; set; } = new();
 
         public void Add(Product product, int quantity)
         {
-            var item = byId(product.Id);
+            var item = ById(product.Id);
 
-            if (item == null) 
+            if (item == null)
                 Items.Add(new CartItem
                 {
                     Product = product,
@@ -24,12 +24,13 @@ namespace API.Entities
 
         public void Remove(int id, int quantity)
         {
-            var item = byId(id);
-            if (item != null) item.Quantity -= quantity;
+            var item = ById(id);
+            if (item == null) return;
+            item.Quantity -= quantity;
             if (item.Quantity <= 0) Items.Remove(item);
         }
 
-        private CartItem byId(int id)
+        private CartItem ById(int id)
         {
             return Items.FirstOrDefault(i => i.ProductId == id);
         }

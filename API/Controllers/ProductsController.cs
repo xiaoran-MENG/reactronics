@@ -9,23 +9,23 @@ namespace API.Controllers
 {
     public class ProductsController : BaseController
     {
-        private readonly ReactronicsContext c;
+        private readonly ReactronicsContext cxt;
 
-        public ProductsController(ReactronicsContext c)
+        public ProductsController(ReactronicsContext cxt)
         {
-            this.c = c;
+            this.cxt = cxt;
         }
  
         [HttpGet]
         public async Task<ActionResult<List<Product>>> All()
         {
-            return await c.Products.ToListAsync();
+            return await cxt.Products.ToListAsync();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> ById(int id)
         {
-            var x = await c.Products.FindAsync(id);
+            var x = await cxt.Products.FindAsync(id);
             return x == null ? NotFound() : x;
         }
     }
