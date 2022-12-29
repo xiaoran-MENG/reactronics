@@ -2,6 +2,8 @@ import axios, { AxiosError, AxiosResponse } from "axios"
 import { toast } from "react-toastify"
 
 axios.defaults.baseURL = 'http://localhost:5000/api/'
+axios.defaults.withCredentials = true
+
 axios.interceptors.response.use(r => r, (e: AxiosError) => {
     const { status } = e.response!
 
@@ -37,6 +39,11 @@ const api = {
     catalog: {
         all: () => REST.get('products'),
         one: (id: number) => REST.get(`products/${id}`)
+    },
+    cart: {
+        get: () => REST.get('cart'),
+        add: (productId: number, quantity = 1) => REST.post(`cart?productId=${productId}&quantity=${quantity}`, {}),
+        remove: (productId: number, quantity = 1) => REST.delete(`cart?productId=${productId}&quantity=${quantity}`),
     },
     errors: {
         badRequest: () => REST.get('test/bad-request'),

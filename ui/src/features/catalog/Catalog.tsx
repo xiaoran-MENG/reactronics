@@ -8,12 +8,10 @@ const Catalog = () => {
     const [products, setProducts] = useState<Product[]>([]);
 
     useEffect(() => {
-        api.catalog.all().then(x => setProducts(x))
+        api.catalog.all().then(setProducts)
     }, [])
 
-    return <>
-        <Menu products={products} />
-    </>
+    return <Menu products={products} />
 }
 
 export default Catalog

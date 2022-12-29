@@ -8,6 +8,7 @@ import Table from '@mui/material/Table';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import api from './../../app/api/index';
+import Loader from '../../app/layout/Loader';
 
 const ProductDetails = () => {
 
@@ -17,12 +18,12 @@ const ProductDetails = () => {
 
   useEffect(() => {
     api.catalog.one(parseInt(id))
-      .then(x => setProduct(x))
-      .catch(e => console.log(e))
+      .then(setProduct)
+      .catch(console.log)
       .finally(() => setLoading(false))
   }, [id])
 
-  if (loading) return <h3>Loading...</h3>
+  if (loading) return <Loader />
 
   if (!product) return <h3>Not found</h3>
 

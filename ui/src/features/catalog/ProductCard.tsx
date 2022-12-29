@@ -1,12 +1,26 @@
+import { LoadingButton } from "@mui/lab";
 import { Card, CardMedia, CardContent, Typography, CardActions, Button, Avatar, CardHeader } from "@mui/material"
+import { useState } from "react"
 import { Link } from "react-router-dom"
 import { Product } from "../../app/models/product"
+import api from './../../app/api/index';
 
 interface Props {
     product: Product
 }
 
 const ProductCard = ({ product }: Props) => {
+
+    const [loading, setLoading] = useState(false)
+
+    const onBuy = (id: number) => {
+        setLoading(true)
+        api.cart
+            .add(id)
+            .catch(console.log)
+            .finally(() => setLoading(false))
+    }
+
     return <Card>
         <CardHeader
             avatar={
@@ -36,7 +50,11 @@ const ProductCard = ({ product }: Props) => {
             </Typography>
         </CardContent>
         <CardActions>
-            <Button size="small">Buy</Button>
+            <LoadingButton
+                onClick={() => onBuy(product.id)}
+                loading={loading}
+                size="small"
+            >Buy</LoadingButton>
             <Button 
                 component={Link}
                 to={`/catalog/${product.id}`}

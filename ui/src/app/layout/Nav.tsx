@@ -1,5 +1,5 @@
 import { AppBar, Badge, IconButton, List, ListItem, Switch, Toolbar, Typography } from "@mui/material"
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import { Box } from "@mui/system";
 
@@ -8,7 +8,7 @@ interface Props {
   onModeChange: () => void
 }
 
-interface Link {
+interface To {
   key: string,
   path: string
 }
@@ -25,7 +25,7 @@ const navStyles = {
   }
 }
 
-function links(links: Link[]) {
+function links(links: To[]) {
   const items = links.map(({ key, path }) =>
     <ListItem
       key={key}
@@ -96,11 +96,15 @@ const Nav = ({ isDarkMode, onModeChange }: Props) => {
         />
       </Box>
       {nav.app()}
-      <Box 
-        display='flex' 
+      <Box
+        display='flex'
         alignItems='center'
       >
-        <IconButton sx={{ color: 'inherit' }}>
+        <IconButton
+          component={Link}
+          to='/cart'
+          sx={{ color: 'inherit' }}
+        >
           <Badge badgeContent={4}>
             <ShoppingBasketIcon />
           </Badge>

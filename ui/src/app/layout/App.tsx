@@ -10,6 +10,7 @@ import Contact from '../../features/contact/Contact';
 import Home from '../../features/home/Home';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
+import ShoppingCart from '../../features/cart/ShoppingCart';
 
 const App = () => {
 
@@ -30,7 +31,7 @@ const App = () => {
     <CssBaseline />
     <Nav
       isDarkMode={isDarkMode}
-      onModeChange={onModeChange} 
+      onModeChange={onModeChange}
     />
     <Container>
       <Route exact path='/' component={Home} />
@@ -38,6 +39,7 @@ const App = () => {
       <Route path='/catalog/:id' component={ProductDetails} />
       <Route path='/about' component={About} />
       <Route path='/contact' component={Contact} />
+      <Route path='/cart' component={ShoppingCart} />
     </Container>
   </ThemeProvider>
 }
