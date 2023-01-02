@@ -38,6 +38,7 @@ namespace API.Controllers
 
             // TODO: verify quantity in stock >= quantity
             cart.Add(product, quantity);
+            
             return await ctx.SaveChangesAsync() > 0
                 ? CreatedAtRoute("GetCart", ToCartDTO(cart))
                 : BadRequest(new ProblemDetails { Title = "Failed to add to cart" });
@@ -92,7 +93,11 @@ namespace API.Controllers
             
             Response.Cookies.Append("customerId", customerId, options);
 
-            var cart = new Cart { CustomerId = customerId };
+            var cart = new Cart 
+            { 
+                CustomerId = customerId 
+            };
+            
             ctx.Carts.Add(cart);
             return cart;
         }

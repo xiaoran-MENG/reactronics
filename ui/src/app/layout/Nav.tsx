@@ -2,6 +2,8 @@ import { AppBar, Badge, IconButton, List, ListItem, Switch, Toolbar, Typography 
 import { Link, NavLink } from "react-router-dom";
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import { Box } from "@mui/system";
+import { useReactronicsContext } from "../context/ReactronicsContext";
+import { CartItem } from "../models/cart";
 
 interface Props {
   isDarkMode: boolean
@@ -72,6 +74,11 @@ const nav = {
 }
 
 const Nav = ({ isDarkMode, onModeChange }: Props) => {
+
+  const { cart } = useReactronicsContext();
+
+  const quantity = cart?.items.reduce((count, i) => count + i.quantity, 0)
+
   return <AppBar
     position='static'
     sx={{ mb: 4 }}
@@ -105,7 +112,7 @@ const Nav = ({ isDarkMode, onModeChange }: Props) => {
           to='/cart'
           sx={{ color: 'inherit' }}
         >
-          <Badge badgeContent={4}>
+          <Badge badgeContent={quantity}>
             <ShoppingBasketIcon />
           </Badge>
         </IconButton>

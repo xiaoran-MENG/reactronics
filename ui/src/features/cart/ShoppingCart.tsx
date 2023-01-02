@@ -1,59 +1,163 @@
-import { useState, useEffect } from 'react';
-import { Cart } from '../../app/models/cart';
+import { Box, Divider, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Add, Delete, Remove } from '@mui/icons-material';
+import { useReactronicsContext } from '../../app/context/ReactronicsContext';
+import { useState } from 'react';
 import api from './../../app/api/index';
-import Loader from './../../app/layout/Loader';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
-import { IconButton } from '@mui/material';
-import { Delete } from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
+import Summary from './Summary';
 
 const ShoppingCart = () => {
+    const { cart, setCart, remove } = useReactronicsContext();
+    const [status, setStatus] = useState({
+        key: '',
+        loading: false
+    })
 
-    const [loading, setLoading] = useState(true)
-    const [cart, setCart] = useState<Cart | null>(null);
+    const key = {
+        ADD: 'add',
+        REM: 'remove',
+        DEL: 'delete'
+    }
 
-    useEffect(() => {
+    const resetStatus = () => setStatus({
+        key: '',
+        loading: false
+    })
+
+    const onAdd = (id: number) => {
+        setStatus({
+            loading: true,
+            key: key.ADD + id
+        })
+
         api.cart
-            .get()
+            .add(id)
             .then(setCart)
             .catch(console.log)
-            .finally(() => setLoading(false))
-    }, [])
+            .finally(resetStatus)
+    }
 
-    if (loading) return <Loader message='Loading' />
+    const onRemove = (id: number) => {
+        removal(id, 1, key.REM + id)
+    }
+
+    const onDelete = (id: number, quantity: number) => {
+        removal(id, quantity, key.DEL + id)
+    }
+
+    const removal = (id: number, quantity: number, key: string) => {
+        setStatus({
+            loading: true,
+            key
+        })
+
+        api.cart
+            .remove(id)
+            .then(() => remove(id, quantity))
+            .catch(console.log)
+            .finally(resetStatus)
+    }
 
     if (!cart) return <Typography variant='h3'>Your cart is empty</Typography>
 
-    return <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }}>
-            <TableHead>
-                <TableRow>
-                    <TableCell>Product</TableCell>
-                    <TableCell align="right">Price</TableCell>
-                    <TableCell align="right">Quantity</TableCell>
-                    <TableCell align="right">Subtotal</TableCell>
-                    <TableCell align="right"></TableCell>
-                </TableRow>
-            </TableHead>
-            <TableBody>
-                {cart.items.map(i => (
-                    <TableRow
-                        key={i.productId}
-                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                        <TableCell component="th" scope="row">{i.name}</TableCell>
-                        <TableCell align="right">${(i.price / 100).toFixed(2)}</TableCell>
-                        <TableCell align="right">{i.quantity}</TableCell>
-                        <TableCell align="right">${((i.price * i.quantity) / 100).toFixed(2)}</TableCell>
-                        <TableCell align="right">
-                            <IconButton color='error'>
-                                <Delete />
-                            </IconButton>
-                        </TableCell>
+    return <>
+        <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }}>
+                <TableHead>
+                    <TableRow>
+                        <TableCell align='center'>Product</TableCell>
+                        <TableCell align="center">Price</TableCell>
+                        <TableCell align="center">Quantity</TableCell>
+                        <TableCell align="center">Subtotal</TableCell>
+                        <TableCell align="center"></TableCell>
                     </TableRow>
-                ))}
-            </TableBody>
-        </Table>
-    </TableContainer>
+                </TableHead>
+                <TableBody>
+                    {cart.items.map(i => (
+                        <TableRow
+                            key={i.productId}
+                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        >
+                            <TableCell component="th" scope="row" >
+                                <Box display='flex' alignItems='center'>
+                                    <div style={{ width: '50%' }}>
+                                        <img
+                                            src={i.imageUrl}
+                                            alt={i.name}
+                                            style={{
+                                                height: 50,
+                                                marginRight: 20
+                                            }}
+                                        />
+                                    </div>
+                                    <span>{i.name}</span>
+                                </Box>
+                            </TableCell>
+                            <TableCell align="center">${(i.price / 100).toFixed(2)}</TableCell>
+                            <TableCell align="center">
+                                <LoadingButton
+                                    loading={status.loading && status.key === key.REM + i.productId}
+                                    onClick={() => onRemove(i.productId)}
+                                    color='error'
+                                >
+                                    <Remove />
+                                </LoadingButton>
+                                {i.quantity}
+                                <LoadingButton
+                                    loading={status.loading && status.key === key.ADD + i.productId}
+                                    onClick={() => onAdd(i.productId)}
+                                    color='error'
+                                >
+                                    <Add />
+                                </LoadingButton>
+                            </TableCell>
+                            <TableCell align="center">${((i.price * i.quantity) / 100).toFixed(2)}</TableCell>
+                            <TableCell align="center">
+                                <LoadingButton
+                                    loading={status.loading && status.key === key.DEL + i.productId}
+                                    onClick={() => onDelete(i.productId, i.quantity)}
+                                    color='error'
+                                >
+                                    <Delete />
+                                </LoadingButton>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
+        <Grid container mt={2} display='flex' justifyContent='center'>
+            <Grid item xs={2} mr={3}>
+                <Summary />
+            </Grid>
+            <Grid item xs={2} mr={3}>
+                <Summary />
+            </Grid>
+            <Grid item xs={2}>
+                <Summary />
+            </Grid>
+        </Grid>
+        <Grid container mt={2} display='flex' justifyContent='center'>
+            <Grid item xs={2} mr={3}>
+                <TableContainer component={Paper} variant={'outlined'}>
+                    <Table>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell colSpan={2}>Subtotal</TableCell>
+                                <TableCell align='center'>Product</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Grid>
+            <Grid item xs={2} mr={3}>
+                <Summary />
+            </Grid>
+            <Grid item xs={2}>
+                <Summary />
+            </Grid>
+        </Grid>
+    </>
 }
 
 export default ShoppingCart

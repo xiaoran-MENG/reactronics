@@ -2,6 +2,7 @@ import { LoadingButton } from "@mui/lab";
 import { Card, CardMedia, CardContent, Typography, CardActions, Button, Avatar, CardHeader } from "@mui/material"
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import { useReactronicsContext } from "../../app/context/ReactronicsContext";
 import { Product } from "../../app/models/product"
 import api from './../../app/api/index';
 
@@ -11,12 +12,15 @@ interface Props {
 
 const ProductCard = ({ product }: Props) => {
 
+    const { setCart } = useReactronicsContext();
+
     const [loading, setLoading] = useState(false)
 
     const onBuy = (id: number) => {
         setLoading(true)
         api.cart
             .add(id)
+            .then(setCart)
             .catch(console.log)
             .finally(() => setLoading(false))
     }

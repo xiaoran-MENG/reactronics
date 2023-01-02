@@ -2,7 +2,7 @@ import './styles.css'
 import { Container, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import Catalog from '../../features/catalog/Catalog';
 import Nav from './Nav';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Route } from 'react-router-dom';
 import About from '../../features/about/About';
 import ProductDetails from '../../features/catalog/ProductDetails';
@@ -11,26 +11,46 @@ import Home from '../../features/home/Home';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import ShoppingCart from '../../features/cart/ShoppingCart';
+import { useReactronicsContext } from '../context/ReactronicsContext';
+import { cookies } from './../util/index';
+import api from './../api/index';
+import Loader from './Loader';
 
 const App = () => {
 
-  const [isDarkMode, setMode] = useState(false)
+  const { setCart } = useReactronicsContext()
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const id = cookies('customerId')
+    if (id) {
+      api.cart
+        .get()
+        .then(setCart)
+        .catch(console.log)
+        .finally(() => setLoading(false))
+    } else setLoading(false)
+  }, [setCart])
+
+  const [darkMode, setMode] = useState(false)
 
   const theme = createTheme({
     palette: {
-      mode: isDarkMode ? 'dark' : 'light'
+      mode: darkMode ? 'dark' : 'light'
     }
   })
 
   const onModeChange = () => {
-    setMode(!isDarkMode)
+    setMode(!darkMode)
   }
+
+  if (loading) return <Loader />
 
   return <ThemeProvider theme={theme}>
     <ToastContainer position='bottom-right' />
     <CssBaseline />
     <Nav
-      isDarkMode={isDarkMode}
+      isDarkMode={darkMode}
       onModeChange={onModeChange}
     />
     <Container>
