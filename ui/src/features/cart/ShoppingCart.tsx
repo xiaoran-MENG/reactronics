@@ -1,10 +1,11 @@
-import { Box, Divider, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Box, Button, Divider, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import { Add, Delete, Remove } from '@mui/icons-material';
 import { useReactronicsContext } from '../../app/context/ReactronicsContext';
 import { useState } from 'react';
 import api from './../../app/api/index';
 import { LoadingButton } from '@mui/lab';
 import Summary from './Summary';
+import { Link } from 'react-router-dom';
 
 const ShoppingCart = () => {
     const { cart, setCart, remove } = useReactronicsContext();
@@ -126,35 +127,19 @@ const ShoppingCart = () => {
                 </TableBody>
             </Table>
         </TableContainer>
-        <Grid container mt={2} display='flex' justifyContent='center'>
-            <Grid item xs={2} mr={3}>
+        <Grid container spacing={2} mt={2} display='flex' justifyContent='center'>
+            <Grid item xs={3}>
                 <Summary />
-            </Grid>
-            <Grid item xs={2} mr={3}>
-                <Summary />
-            </Grid>
-            <Grid item xs={2}>
-                <Summary />
-            </Grid>
-        </Grid>
-        <Grid container mt={2} display='flex' justifyContent='center'>
-            <Grid item xs={2} mr={3}>
-                <TableContainer component={Paper} variant={'outlined'}>
-                    <Table>
-                        <TableBody>
-                            <TableRow>
-                                <TableCell colSpan={2}>Subtotal</TableCell>
-                                <TableCell align='center'>Product</TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Grid>
-            <Grid item xs={2} mr={3}>
-                <Summary />
-            </Grid>
-            <Grid item xs={2}>
-                <Summary />
+                <Box display='flex' justifyContent='center' mt={2}>
+                    <Button
+                        component={Link}
+                        to='/checkout'
+                        variant='contained'
+                        size='large'
+                    >
+                        Checkout
+                    </Button>
+                </Box>
             </Grid>
         </Grid>
     </>

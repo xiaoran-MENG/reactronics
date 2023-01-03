@@ -15,6 +15,7 @@ import { useReactronicsContext } from '../context/ReactronicsContext';
 import { cookies } from './../util/index';
 import api from './../api/index';
 import Loader from './Loader';
+import Checkout from './../../features/checkout/Checkout';
 
 const App = () => {
 
@@ -60,6 +61,7 @@ const App = () => {
       <Route path='/about' component={About} />
       <Route path='/contact' component={Contact} />
       <Route path='/cart' component={ShoppingCart} />
+      <Route path='/checkout' component={Checkout} />
     </Container>
   </ThemeProvider>
 }
