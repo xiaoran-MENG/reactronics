@@ -3,7 +3,6 @@ import { Link, NavLink } from "react-router-dom";
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import { Box } from "@mui/system";
 import { useReactronicsContext } from "../context/ReactronicsContext";
-import { CartItem } from "../models/cart";
 
 interface Props {
   isDarkMode: boolean
@@ -79,10 +78,7 @@ const Nav = ({ isDarkMode, onModeChange }: Props) => {
 
   const quantity = cart?.items.reduce((count, i) => count + i.quantity, 0)
 
-  return <AppBar
-    position='static'
-    sx={{ mb: 4 }}
-  >
+  return <AppBar position='static' sx={{ mb: 4 }}>
     <Toolbar sx={{
       display: 'flex',
       justifyContent: 'space-between',
@@ -103,10 +99,7 @@ const Nav = ({ isDarkMode, onModeChange }: Props) => {
         />
       </Box>
       {nav.app()}
-      <Box
-        display='flex'
-        alignItems='center'
-      >
+      <Box display='flex' alignItems='center'>
         <IconButton
           component={Link}
           to='/cart'

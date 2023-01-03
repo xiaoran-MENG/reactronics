@@ -22,14 +22,14 @@ export const ReactronicsContextProvider = ({ children }: PropsWithChildren<any>)
         if (!cart) return;
 
         const items = [...cart.items]
-        const i = items.findIndex(x => x.productId == id)
+        const i = items.findIndex(x => x.productId === id)
         if (i < 0) return;
 
         items[i].quantity -= quantity;
         if (items[i].quantity <= 0) items.splice(i, 1)
-        
+
         setCart(c => {
-            return { ...c!, items}
+            return { ...c!, items }
         })
     }
 
