@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.Data;
 using API.Entities;
+using API.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,9 +18,11 @@ namespace API.Controllers
         }
  
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> All()
+        public async Task<ActionResult<List<Product>>> All(string orderBy)
         {
-            return await cxt.Products.ToListAsync();
+            return await cxt.Products
+                .Sort(orderBy)
+                .ToListAsync();
         }
 
         [HttpGet("{id}")]

@@ -38,5 +38,4 @@ export default function counterReducer(state = init, action: any) {
         default:
             return state;
     }
-    return state
 }
